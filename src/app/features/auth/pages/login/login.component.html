@@ -1,0 +1,39 @@
+<div class="d-flex justify-content-center align-items-center min-vh-100 p-2 bg-light">
+  <div class="container col-12 col-md-6 col-lg-4 shadow-sm px-4 py-5 bg-white min-vh-80">
+    <h2 class="text-center mb-4">Login</h2>
+    
+    <p class="text-danger text-center" *ngIf="submited && form.invalid">
+      Dados incorretos. Por favor, revise seus dados e tente novamente.</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <!-- Campo de Email -->
+      <div class="mb-3">
+        <app-formfield
+          [label]="'Email'"
+          [placeholder]="'Digite seu email'"
+          [type]="'email'"
+          [control]="emailControl"
+        />
+        <p *ngIf="submited && emailControl.invalid" class="text-danger">
+          <span *ngIf="emailControl.errors?.['required']">Email é obrigatório.</span>
+          <span *ngIf="emailControl.errors?.['email']">Email inválido.</span>
+        </p>
+      </div>
+
+      <!-- Campo de Senha -->
+      <div class="mb-3">
+        <app-formfield
+          [label]="'Senha'"
+          [placeholder]="'Digite sua senha'"
+          [type]="'password'"
+          [control]="passwordControl"
+        />
+        <p *ngIf="submited && passwordControl.invalid" class="text-danger">
+          <span *ngIf="passwordControl.errors?.['required']">Senha é obrigatória.</span>
+        </p>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Entrar</button>
+    </form>
+  </div>
+</div>
