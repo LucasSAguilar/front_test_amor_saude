@@ -27,6 +27,7 @@
           [placeholder]="'Digite sua senha'"
           [type]="'password'"
           [control]="passwordControl"
+          [showToggle]="true"
         />
         <p *ngIf="submited && passwordControl.invalid" class="text-danger">
           <span *ngIf="passwordControl.errors?.['required']">Senha é obrigatória.</span>

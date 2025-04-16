@@ -1,11 +1,22 @@
-<div class="mb-3">
-    <label [for]="id" class="form-label">{{ label }}</label>
+<div class="mb-3 position-relative">
+  <label [for]="label" class="form-label">{{ label }}</label>
+
+  <div class="input-group">
     <input
-      [id]="id"
-      [type]="type"
+      [type]="currentInputType"
       class="form-control"
       [placeholder]="placeholder"
       [formControl]="control"
-    /> 
+    />
+    <button
+      *ngIf="type === 'password' && showToggle"
+      type="button"
+      class="btn btn-dark"
+      (click)="togglePasswordVisibility()"
+      tabindex="-1"
+    >
+      <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+    </button>
   </div>
-  
+
+</div>
