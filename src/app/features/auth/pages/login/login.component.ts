@@ -7,6 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { NgIf } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +22,8 @@ export class LoginComponent {
     email: 'test@test',
     senha: 'test',
   };
+
+  constructor(private router: Router) {}
 
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -37,7 +40,7 @@ export class LoginComponent {
       this.form.value.email === this.user_for_test.email &&
       this.form.value.password === this.user_for_test.senha
     ) {
-      alert('Login successful!');
+      this.router.navigate(['/dashboard/clinics']);
     }
   
   }
@@ -49,4 +52,5 @@ export class LoginComponent {
   get passwordControl(): FormControl {
     return this.form.get('password') as FormControl;
   }
+
 }
