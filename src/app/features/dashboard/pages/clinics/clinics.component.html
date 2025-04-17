@@ -9,13 +9,10 @@
 		<p>Selecione, edite e inclua novas clínicas!</p>
 	  </div>
 	  <div class="">
-		<button class="btn btn-primary">Adicionar nova +</button>
+		<button (click)="navigateNewClinic()" class="btn btn-primary">Adicionar nova +</button>
 	  </div>
 	</div>
   
-
-
-
 	<!-- list clinics -->
 
 	<form class="w-100">
@@ -63,8 +60,8 @@
 			  <span *ngIf="!clinic.ativa">🔴</span>
 			</td>
 			<td class="text-center">
-			  <button class="btn"><i class="bi bi-eye-fill"></i></button>
-			  <button class="btn"><i class="bi bi-pencil-fill"></i></button>
+			  <button (click)="navigateViewClinic(clinic.id)" class="btn"><i class="bi bi-eye-fill"></i></button>
+			  <button (click)="navigateEditClinic(clinic.id)" class="btn"><i class="bi bi-pencil-fill"></i></button>
 			</td>
 		  </tr>
 		  <tr *ngIf="(clinics$ | async)?.length === 0">

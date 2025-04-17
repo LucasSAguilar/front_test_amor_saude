@@ -6,6 +6,7 @@ import { NgbHighlight, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClinicService } from '../../services/clinic-table.service';
 import { NgbdSortableHeader, SortEvent } from '../../directives/sortable.directive';
 import { ClinicInterface } from '../../models/clinic.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-clinics',
@@ -21,7 +22,7 @@ export class ClinicsComponent {
 
 	@ViewChildren(NgbdSortableHeader) headers!: QueryList<NgbdSortableHeader>;
 
-	constructor(public service: ClinicService) {
+	constructor(public service: ClinicService, private router: Router) {
 		this.clinics$ = service.clinics$;
 		this.total$ = service.total$;
 	}
@@ -36,5 +37,17 @@ export class ClinicsComponent {
 
 		this.service.sortColumn = column;
 		this.service.sortDirection = direction;
+	}
+
+	navigateNewClinic() {
+		this.router.navigate(['/dashboard/new']);
+	}
+
+	navigateEditClinic(id: Number) {
+		this.router.navigate(['/dashboard/edit', id]);
+	}
+
+	navigateViewClinic(id: Number) {
+		this.router.navigate(['/dashboard/view', id]);
 	}
 }
