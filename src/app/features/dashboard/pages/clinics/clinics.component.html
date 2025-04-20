@@ -1,85 +1,154 @@
-<main class="container d-flex flex-column justify-content-center align-items-center vh-100 vw-100">
-	
+<main
+  class="container d-flex flex-column justify-content-center align-items-center vh-100 vw-100"
+>
+  <!-- title -->
 
-	<!-- title -->
+  <div class="w-100 d-flex justify-content-between align-items-center mb-3">
+    <div class="">
+      <h1>Clínicas</h1>
+      <p>Selecione, edite e inclua novas clínicas!</p>
+    </div>
+    <div class="">
+      <button (click)="navigateNewClinic()" class="btn btn-primary">
+        Adicionar nova +
+      </button>
+    </div>
+  </div>
 
-	<div class="w-100 d-flex justify-content-between align-items-center mb-3">
-	  <div class="">
-		<h1>Clínicas</h1>
-		<p>Selecione, edite e inclua novas clínicas!</p>
-	  </div>
-	  <div class="">
-		<button (click)="navigateNewClinic()" class="btn btn-primary">Adicionar nova +</button>
-	  </div>
-	</div>
-  
-	<!-- list clinics -->
+  <!-- list clinics -->
 
-	<form class="w-100">
-	  <div class="mb-3 row">
-		<div class="">
-		  <input
-			id="table-complete-search"
-			type="text"
-			placeholder="Digite o que deseja procurar"
-			class="form-control w-100"
-			name="searchTerm"
-			[(ngModel)]="service.searchTerm"
-		  />
-		</div>
-		<span *ngIf="service.loading$ | async" class="col col-form-label">Loading...</span>
-	  </div>
-	
-	  <div class="border-top border-dark w-100 opacity-25 mb-2" style="height: 2px;"></div>
-  
-	  <table class="table table-striped">
-		<thead>
-			<tr>
-				<th class="text-center" scope="col" style="width: 5%;">#</th>
-				<th class="text-center" scope="col" style="width: 20%;" sortable="razao_social" (sort)="onSort($event)">Razão Social</th>
-				<th class="text-center" scope="col" style="width: 20%;" sortable="regional" (sort)="onSort($event)">Regional</th>
-				<th class="text-center" scope="col" style="width: 25%;" sortable="regional" (sort)="onSort($event)">Especialidades</th>
-				<th class="text-center" scope="col" style="width: 10%;" sortable="ativa" (sort)="onSort($event)">Ativa</th>
-				<th class="text-center" scope="col" style="width: 10%;">Opções</th>
-			  </tr>
-		</thead>
-		<tbody>
-		  <tr *ngFor="let clinic of clinics$ | async;">
-			<th class="text-center" scope="row">{{ clinic.id }}</th>
-			<td class="text-center">
-			  <ngb-highlight [result]="clinic.razao_social" [term]="service.searchTerm" />
-			</td>
-			<td class="text-center">
-			  <ngb-highlight [result]="clinic.regional" [term]="service.searchTerm" />
-			</td>
-			<td class="text-center">
-			  <ngb-highlight [result]="clinic.especialidades_medicas.toString()" [term]="service.searchTerm" />
-			</td>
-			<td class="text-center">
-			  <span *ngIf="clinic.ativa">🟢</span>
-			  <span *ngIf="!clinic.ativa">🔴</span>
-			</td>
-			<td class="text-center">
-			  <button (click)="navigateViewClinic(clinic.id)" class="btn"><i class="bi bi-eye-fill"></i></button>
-			  <button (click)="navigateEditClinic(clinic.id)" class="btn"><i class="bi bi-pencil-fill"></i></button>
-			</td>
-		  </tr>
-		  <tr *ngIf="(clinics$ | async)?.length === 0">
-			<td colspan="6" style="text-align: center">Nenhuma clínica encontrada</td>
-		  </tr>
-		</tbody>
-	  </table>
-  
-	  <div class="d-flex justify-content-between p-2">
-		<ngb-pagination [collectionSize]="(total$ | async)!" [(page)]="service.page" [pageSize]="service.pageSize">
-		</ngb-pagination>
-  
-		<select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize">
-		  <option [ngValue]="2">2 itens por página</option>
-		  <option [ngValue]="4">4 itens por página</option>
-		  <option [ngValue]="6">6 itens por página</option>
-		</select>
-	  </div>
-	</form>
-  </main>
-  
+  <form class="w-100">
+    <div class="mb-3 row">
+      <div class="">
+        <input
+          id="table-complete-search"
+          type="text"
+          placeholder="Digite o que deseja procurar"
+          class="form-control w-100"
+          name="searchTerm"
+          [(ngModel)]="service.searchTerm"
+        />
+      </div>
+      <span *ngIf="service.loading$ | async" class="col col-form-label"
+        >Loading...</span
+      >
+    </div>
+
+    <div
+      class="border-top border-dark w-100 opacity-25 mb-2"
+      style="height: 2px"
+    ></div>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th class="text-center" scope="col" style="width: 5%">#</th>
+          <th
+            class="text-center"
+            scope="col"
+            style="width: 20%"
+            sortable="razao_social"
+            (sort)="onSort($event)"
+          >
+            Razão Social
+          </th>
+          <th
+            class="text-center"
+            scope="col"
+            style="width: 20%"
+            sortable="regional"
+            (sort)="onSort($event)"
+          >
+            Regional
+          </th>
+          <th
+            class="text-center"
+            scope="col"
+            style="width: 25%"
+            sortable="regional"
+            (sort)="onSort($event)"
+          >
+            Especialidades
+          </th>
+          <th
+            class="text-center"
+            scope="col"
+            style="width: 10%"
+            sortable="ativa"
+            (sort)="onSort($event)"
+          >
+            Ativa
+          </th>
+          <th class="text-center" scope="col" style="width: 10%">Opções</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let clinic of clinics$ | async">
+          <th class="text-center" scope="row">{{ clinic.id }}</th>
+          <td class="text-center">
+            <ngb-highlight
+              [result]="clinic.razao_social"
+              [term]="service.searchTerm"
+            />
+          </td>
+          <td class="text-center">
+            <ngb-highlight
+              [result]="clinic.regional"
+              [term]="service.searchTerm"
+            />
+          </td>
+          <td class="text-center">
+            <span>
+              <ng-container
+                *ngFor="let esp of clinic.especialidades; let last = last"
+              >
+                <ngb-highlight
+                  [result]="esp"
+                  [term]="service.searchTerm"
+                ></ngb-highlight
+                ><span *ngIf="!last">, </span>
+              </ng-container>
+            </span>
+          </td>
+          <td class="text-center">
+            <span *ngIf="clinic.ativa">🟢</span>
+            <span *ngIf="!clinic.ativa">🔴</span>
+          </td>
+          <td class="text-center">
+            <button (click)="navigateViewClinic(clinic.id)" class="btn">
+              <i class="bi bi-eye-fill"></i>
+            </button>
+            <button (click)="navigateEditClinic(clinic.id)" class="btn">
+              <i class="bi bi-pencil-fill"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="(clinics$ | async)?.length === 0">
+          <td colspan="6" style="text-align: center">
+            Nenhuma clínica encontrada
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between p-2">
+      <ngb-pagination
+        [collectionSize]="(total$ | async)!"
+        [(page)]="service.page"
+        [pageSize]="service.pageSize"
+      >
+      </ngb-pagination>
+
+      <select
+        class="form-select"
+        style="width: auto"
+        name="pageSize"
+        [(ngModel)]="service.pageSize"
+      >
+        <option [ngValue]="2">2 itens por página</option>
+        <option [ngValue]="4">4 itens por página</option>
+        <option [ngValue]="6">6 itens por página</option>
+      </select>
+    </div>
+  </form>
+</main>

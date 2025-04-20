@@ -31,17 +31,19 @@ export class LoginComponent {
   });
 
   onSubmit() {
-    this.submited = true;
-    if (this.form.invalid) {
-      return;
-    }
+    this.router.navigate(['/dashboard/clinics']);
 
-    if(
-      this.form.value.email === this.user_for_test.email &&
-      this.form.value.password === this.user_for_test.senha
-    ) {
-      this.router.navigate(['/dashboard/clinics']);
-    }
+    // this.submited = true;
+    // if (this.form.invalid) {
+    //   return;
+    // }
+
+    // if(
+    //   this.form.value.email === this.user_for_test.email &&
+    //   this.form.value.password === this.user_for_test.senha
+    // ) {
+    //   this.router.navigate(['/dashboard/clinics']);
+    // }
   
   }
 

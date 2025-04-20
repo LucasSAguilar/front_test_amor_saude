@@ -6,5 +6,5 @@ export interface ClinicInterface {
     regional: string;
     data_inauguracao: Date;
     ativa: boolean;
-    especialidades_medicas: string[];
+    especialidades: string[];
 }
