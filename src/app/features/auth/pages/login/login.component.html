@@ -2,8 +2,8 @@
   <div class="container col-12 col-md-6 col-lg-4 shadow-sm px-4 py-5 bg-white min-vh-80">
     <h2 class="text-center mb-4">Login</h2>
     
-    <p class="text-danger text-center" *ngIf="submited && form.invalid">
-      Dados incorretos. Por favor, revise seus dados e tente novamente.</p>
+    <p class="text-danger text-center">
+      {{messageError}}</p>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <!-- Campo de Email -->
@@ -33,7 +33,6 @@
           <span *ngIf="passwordControl.errors?.['required']">Senha é obrigatória.</span>
         </p>
       </div>
-
       <button type="submit" class="btn btn-primary w-100">Entrar</button>
     </form>
   </div>

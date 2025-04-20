@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
+import { apiUserService } from '../../services/api-users.service';
 
 @Component({
   selector: 'app-login',
@@ -18,12 +19,13 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   submited: boolean = false;
+  messageError: string = '';
   user_for_test: { email: string; senha: string } = {
     email: 'test@test',
     senha: 'test',
   };
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: apiUserService) {}
 
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -31,20 +33,22 @@ export class LoginComponent {
   });
 
   onSubmit() {
-    this.router.navigate(['/dashboard/clinics']);
-
-    // this.submited = true;
-    // if (this.form.invalid) {
-    //   return;
-    // }
-
-    // if(
-    //   this.form.value.email === this.user_for_test.email &&
-    //   this.form.value.password === this.user_for_test.senha
-    // ) {
-    //   this.router.navigate(['/dashboard/clinics']);
-    // }
+    this.submited = true;
   
+    if (this.form.invalid) {
+      this.messageError = 'Preencha todos os campos corretamente!';
+      return;
+    };
+  
+    this.authService.login(this.form.value as any).subscribe({
+      next: (res) => {
+        console.log('Login ok', res);
+        this.router.navigate(['/dashboard/clinics']);
+      },
+      error: (err) => {
+        this.messageError = err.error.message;
+      }
+    });
   }
 
   get emailControl(): FormControl {
