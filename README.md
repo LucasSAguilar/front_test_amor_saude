@@ -1,27 +1,39 @@
-# FrontClinicas
+# Front-end | Amor e Saúde
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.16.
+- Angular 17
+- Bootstrap
 
-## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Antes de iniciar a instalação do Front-end, inicie primeiro o servidor back-end. O código e documentação se encontram nesse [link](https://github.com/LucasSAguilar/back_test_amor_saude.git)
 
-## Code scaffolding
+### Como inicializar o projeto
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+#### - Clone o repositório
 
-## Build
+`` git clone https://github.com/LucasSAguilar/front_test_amor_saude.git``
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Acesse a pasta e instale as dependências necessárias
 
-## Running unit tests
+``cd nome_da_pasta``
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+``npm install``
 
-## Running end-to-end tests
+Acesse a pasta **src/app/environments/environments.ts**
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Defina a **API_URL** com a url de sua API. Exemplo:
 
-## Further help
+``
+API_URL: 'http://127.0.0.1:8000/api'
+``
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+#### - Inicialize o projeto
+
+``ng serve``
+
+--- 
+
+Caso tenha feito o migrate corretamente com o código do backend, podera acessar com o seguinte usuário:
+
+E-mail: admin@example.com
+
+Password: senha123
