@@ -13,4 +13,7 @@ export class FetchClinicsService {
   getAllClinics(): Observable<ClinicInterface[]> {
     return this.http.get<ClinicInterface[]>(`${environment.API_URL}/clinicas`);
   }
+  getClinicById(id:number): Observable<ClinicInterface> {
+    return this.http.get<ClinicInterface>(`${environment.API_URL}/clinicas/${id}`);
+  }
 }

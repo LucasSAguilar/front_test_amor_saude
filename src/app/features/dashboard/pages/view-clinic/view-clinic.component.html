@@ -9,17 +9,17 @@
       <div class="row">
         <div class="col-md-4 mb-3 text-center">
           <label class="form-label fw-bold">Razão Social</label>
-          <p class="form-control-plaintext">Clínica Saúde Integral LTDA</p>
+          <p class="form-control-plaintext">{{clinicData?.razao_social}}</p>
         </div>
   
         <div class="col-md-4 mb-3 text-center">
           <label class="form-label fw-bold">Nome Fantasia</label>
-          <p class="form-control-plaintext">Saúde Integral</p>
+          <p class="form-control-plaintext">{{clinicData?.nome_fantasia}}</p>
         </div>
   
         <div class="col-md-4 mb-3 text-center">
           <label class="form-label fw-bold">CNPJ</label>
-          <p class="form-control-plaintext">12.345.678/0001-90</p>
+          <p class="form-control-plaintext">{{clinicData?.cnpj}}</p>
         </div>
       </div>
   
@@ -27,12 +27,13 @@
       <div class="row text-center">
         <div class="col-md-6 mb-3">
           <label class="form-label fw-bold">Regional</label>
-          <p class="form-control-plaintext">São Paulo - Zona Sul</p>
+          <p class="form-control-plaintext">{{clinicData?.regional}}</p>
         </div>
   
         <div class="col-md-6 mb-3 text-center">
           <label class="form-label fw-bold">Data de Abertura</label>
-          <p class="form-control-plaintext">15/08/2018</p>
+          <p class="form-control-plaintext">{{ clinicData?.data_inauguracao | date:'dd/MM/yyyy' }}</p>
+
         </div>
       </div>
   
@@ -41,18 +42,15 @@
         <div class="col-md-6 mb-3">
           <label class="form-label fw-bold">Especialidades Médicas Atendidas</label>
           <ul class="list-group">
-            <li class="list-group-item p-1">Cardiologia</li>
-            <li class="list-group-item p-1">Pediatria</li>
-            <li class="list-group-item p-1">Dermatologia</li>
-            <li class="list-group-item p-1">Ortopedia</li>
-            <li class="list-group-item p-1">Neurologia</li>
+            <li class="list-group-item p-1" *ngFor="let especialidade of clinicData?.especialidades">{{especialidade}}</li>
           </ul>
         </div>
   
         <div class="col-md-6 mb-3 text-center">
           <label class="form-label fw-bold">Ativa</label>
           <p class="form-control-plaintext">
-            <span class="badge bg-success">Sim</span>
+            <span *ngIf="clinicData?.ativa" class="badge bg-success">Sim</span>
+            <span *ngIf="!clinicData?.ativa" class="badge bg-danger">Não</span>
           </p>
         </div>
       </div>
