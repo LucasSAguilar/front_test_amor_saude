@@ -8,6 +8,7 @@
     <p *ngIf="isEditMode">Edite os dados da clínica selecionada</p>
 
     <div class="border-top border-dark w-100 opacity-25 my-4" style="height: 2px;"></div>
+
     <!-- Loading Spinner -->
     <div *ngIf="isLoading" class="text-center py-4">
       <div class="spinner-border" role="status">
@@ -15,7 +16,7 @@
       </div>
     </div>
 
-    <form>
+    <form [formGroup]="form">
       <!-- Linha 1 -->
       <div class="row">
         <div class="col-md-4 mb-3">
@@ -25,9 +26,8 @@
             [type]="'text'"
             [control]="razao_socialControl"
           />
-
-          <p class="text-danger">
-            <span>Razão social é obrigatório.</span>
+          <p class="text-danger" *ngIf="razao_socialControl.invalid && razao_socialControl.touched">
+            Razão social é obrigatória.
           </p>
         </div>
 
@@ -38,9 +38,8 @@
             [type]="'text'"
             [control]="nome_fantasiaControl"
           />
-
-          <p class="text-danger">
-            <span>Nome Fantasia é obrigatório.</span>
+          <p class="text-danger" *ngIf="nome_fantasiaControl.invalid && nome_fantasiaControl.touched">
+            Nome Fantasia é obrigatório.
           </p>
         </div>
 
@@ -51,9 +50,8 @@
             [type]="'text'"
             [control]="cnpjControl"
           />
-
-          <p class="text-danger">
-            <span>CNPJ é obrigatório.</span>
+          <p class="text-danger" *ngIf="cnpjControl.invalid && cnpjControl.touched">
+            CNPJ é obrigatório.
           </p>
         </div>
       </div>
@@ -66,14 +64,15 @@
             id="regional"
             formControlName="regional"
             class="form-select"
-            [class.is-invalid]="regionalControl.invalid && form.touched"
+            [class.is-invalid]="regionalControl.invalid && regionalControl.touched"
           >
+            <option value="" disabled selected>Selecione uma regional</option>
             <option *ngFor="let r of regionais" [value]="r.value">
               {{ r.label }}
             </option>
           </select>
-          <p class="text-danger">
-            <span>Regional é obrigatório.</span>
+          <p class="text-danger" *ngIf="regionalControl.invalid && regionalControl.touched">
+            Regional é obrigatória.
           </p>
         </div>
 
@@ -84,57 +83,50 @@
             [type]="'date'"
             [control]="data_inauguracaoControl"
           />
-
-          <p class="text-danger">
-            <span>Data é obrigatório.</span>
+          <p class="text-danger" *ngIf="data_inauguracaoControl.invalid && data_inauguracaoControl.touched">
+            Data é obrigatória.
           </p>
         </div>
       </div>
 
       <!-- Linha 3 -->
-
       <div class="row align-items-center">
         <div class="col-md-6 mb-3">
-          <label for="especialidades" class="form-label"
-            >Especialidades Médicas Atendidas</label
-          >
-          <select
-            id="especialidades"
-            formControlName="especialidades_medicas"
-            class="form-select"
-            multiple
-            [class.is-invalid]="
-              especialidades_medicasControl.invalid && form.touched
-            "
-          >
-            <option *ngFor="let esp of especialidades" [value]="esp.value">
-              {{ esp.label }}
-            </option>
-          </select>
+          <label for="especialidades" class="form-label">Especialidades Médicas Atendidas</label>
+<select
+  id="especialidades"
+  formControlName="especialidades_medicas"
+  class="form-select"
+  multiple
+  [class.is-invalid]="especialidades_medicasControl.invalid && especialidades_medicasControl.touched"
+>
+  <option *ngFor="let esp of especialidades" [value]="esp.value">
+    {{ esp.label }}
+  </option>
+</select>
 
-          <p class="text-danger">
-            <span>Selecione ao menos 5 especialidades.</span>
+          <p class="text-danger" *ngIf="especialidades_medicasControl.invalid && especialidades_medicasControl.touched">
+            Selecione ao menos 5 especialidades.
           </p>
         </div>
 
         <div class="col-md-6 mb-3 d-flex">
-          <div class="form-check form-switch form-check-reverse ">
+          <div class="form-check form-switch form-check-reverse">
             <label class="form-check-label" for="ativa">Ativa</label>
             <input
               type="checkbox"
               role="switch"
               id="ativa"
               formControlName="ativa"
-                class="form-check-input" />
+              class="form-check-input"
+            />
           </div>
         </div>
 
         <div class="col-md-12 d-flex justify-content-end gap-2 mb-3">
           <button type="submit" class="btn btn-primary">Salvar</button>
           <button type="button" (click)="returnPage()" class="btn btn-dark">Voltar</button>
-          <button *ngIf="isEditMode" type="button" class="btn btn-danger">
-            Excluir
-          </button>
+          <button *ngIf="isEditMode" type="button" class="btn btn-danger">Excluir</button>
         </div>
       </div>
     </form>

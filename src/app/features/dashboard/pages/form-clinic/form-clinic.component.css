@@ -1,0 +1,9 @@
+select[multiple] option {
+    padding: 10px;
+  }
+  
+  select[multiple] option:checked {
+    background-color: #007bff;
+    color: white;
+  }
+  

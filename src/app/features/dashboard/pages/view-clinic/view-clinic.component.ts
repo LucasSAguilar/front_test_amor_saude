@@ -28,14 +28,9 @@ export class ViewClinicComponent implements OnInit {
     }
   }
 
-    
-      
-
   returnPage() {
     window.history.back();
   }
-
-
 
   editThisClinic(){
     this.router.navigate(['/dashboard/edit', this.clinicId]);
