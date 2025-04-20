@@ -20,4 +20,8 @@ export class FetchClinicsService {
   postClinic(clinic: ClinicInterface): Observable<ClinicInterface> {
     return this.http.post<ClinicInterface>(`${environment.API_URL}/clinicas`, clinic);
   }
+
+  putClinic(clinic: ClinicInterface): Observable<ClinicInterface> {
+    return this.http.put<ClinicInterface>(`${environment.API_URL}/clinicas/${clinic.id}`, clinic);
+  }
 }

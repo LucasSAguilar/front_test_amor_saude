@@ -29,7 +29,7 @@ export class ClinicTableStateService {
   private _allClinics: ClinicInterface[] = [];
 
   private _state: State = {
-    page: 1, // Definido como 1 inicialmente para evitar NaN
+    page: 1,
     pageSize: 4,
     searchTerm: '',
     sortColumn: '',
@@ -45,7 +45,6 @@ export class ClinicTableStateService {
       this._allClinics = clinics;
       console.log('clinics carregadas:', this._allClinics);
       
-      // Dispara a busca após garantir que as clínicas estão carregadas
       this._set({ page: 1 });
       this._search$.next();
     });
@@ -79,11 +78,9 @@ export class ClinicTableStateService {
 
   private _search(): Observable<SearchResult> {
     const { sortColumn, sortDirection, pageSize, page, searchTerm } = this._state;
-    console.log(`Busca com o estado atual:`, this._state);
 
     // Verifique se a página é um número válido
     if (isNaN(page) || page < 1) {
-      console.warn(`Página inválida. Forçando para página 1.`);
       this._set({ page: 1 });
     }
 
@@ -93,18 +90,24 @@ export class ClinicTableStateService {
     const total = clinics.length;
     clinics = clinics.slice((page - 1) * pageSize, page * pageSize);
 
-    console.log('Clinics após filtro e paginação:', clinics);
     return of({ clinics, total });
   }
 
+  refresh() {
+    this.fetchClinics.getAllClinics().subscribe((clinics) => {
+      this._allClinics = clinics;
+      this._set({ page: 1 });
+      this._search$.next();
+    });
+  }
+  
+
   private _set(patch: Partial<State>) {
-    // Garantir que page é um número válido ao definir o estado
     if (patch.page && isNaN(patch.page)) {
-      patch.page = 1; // Se a página for inválida, definimos como 1
+      patch.page = 1;
     }
     Object.assign(this._state, patch);
-    console.log('Estado atualizado:', this._state);
-    this._search$.next(); // Dispara a busca com o novo estado
+    this._search$.next();
   }
 
   // Observáveis para acesso aos dados
@@ -131,7 +134,7 @@ export class ClinicTableStateService {
   set page(page: number) { 
     if (isNaN(page) || page < 1) {
       console.warn(`Página inválida. Forçando para página 1.`);
-      page = 1; // Forçar a página para 1 se o valor for inválido
+      page = 1;
     }
     console.log('Mudando página para:', page);
     this._set({ page });

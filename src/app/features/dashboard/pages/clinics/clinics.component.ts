@@ -36,9 +36,11 @@ export class ClinicsComponent {
 
   constructor(public service: ClinicTableStateService, private router: Router) {
     this.clinics$ = service.clinics$;
-	console.log('clinics$', this.clinics$);
-	
     this.total$ = service.total$;
+  }
+
+  ngOnInit() {
+    this.service.refresh();
   }
 
   onSort({ column, direction }: SortEvent) {
@@ -62,6 +64,4 @@ export class ClinicsComponent {
   navigateViewClinic(id: number) {
     this.router.navigate(['/dashboard/view', id]);
   }
-
-  
 }

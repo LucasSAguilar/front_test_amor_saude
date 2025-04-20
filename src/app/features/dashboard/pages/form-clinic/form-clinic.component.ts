@@ -2,7 +2,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FormFieldComponent } from '../../../auth/components/formfield/form-field.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ClinicInterface } from '../../models/clinic.model';
 import { FetchClinicsService } from '../../services/fetch-clinics.service';
 
@@ -27,13 +27,14 @@ export class FormClinicComponent implements OnInit {
     cnpj: new FormControl<string | null>(null, [Validators.required]),
     regional: new FormControl<string | null>(null, [Validators.required]),
     data_inauguracao: new FormControl<string | null>(null, [Validators.required]),
-    especialidades_medicas: new FormControl<string[] | null>([], [Validators.required]),
+    especialidades: new FormControl<string[] | null>([], [Validators.required]),
     ativa: new FormControl<boolean | null>(false),
   });
 
   constructor(
     private route: ActivatedRoute,
-    private serviceApiClinic: FetchClinicsService
+    private serviceApiClinic: FetchClinicsService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -101,6 +102,7 @@ export class FormClinicComponent implements OnInit {
       regional: clinic.regional,
       data_inauguracao: this.formatDateToInput(clinic.data_inauguracao as Date),
       ativa: clinic.ativa === true,
+      especialidades: clinic.especialidades,
     });
   
   }
@@ -135,7 +137,7 @@ export class FormClinicComponent implements OnInit {
   }
 
   get especialidades_medicasControl(): FormControl {
-    return this.form.get('especialidades_medicas') as FormControl;
+    return this.form.get('especialidades') as FormControl;
   }
 
   get ativaControl(): FormControl {
@@ -143,7 +145,7 @@ export class FormClinicComponent implements OnInit {
   }
 
   returnPage() {
-    window.history.back();
+    this.router.navigate(['/dashboard/clinics']);
   }
 
 
@@ -160,12 +162,21 @@ export class FormClinicComponent implements OnInit {
       cnpj: this.form.value.cnpj!,
       regional: this.form.value.regional!,
       data_inauguracao: new Date(this.form.value.data_inauguracao!).toISOString().split('T')[0],
-      especialidades: this.form.value.especialidades_medicas!,
+      especialidades: this.form.value.especialidades!,
       ativa: this.form.value.ativa!,
     };
 
     if (this.isEditMode) {
-      console.log("Editando clínica:", clinicData);
+      const response = this.serviceApiClinic.putClinic(clinicData);
+      response.subscribe(
+        (response) => {
+          console.log('Clínica atualizada com sucesso:', response);
+          this.returnPage();
+        },
+        (error) => {
+          console.error('Erro ao atualizar clínica:', error);
+        }
+      );
       
     } else {
       const response = this.serviceApiClinic.postClinic(clinicData);
