@@ -72,6 +72,7 @@ export class FormClinicComponent implements OnInit {
     if (this.isEditMode) {
       this.loadClinicData(this.clinicId!);
     }
+
   }
 
   loadClinicData(id: string) {
@@ -98,7 +99,7 @@ export class FormClinicComponent implements OnInit {
       nome_fantasia: clinic.nome_fantasia,
       cnpj: clinic.cnpj,
       regional: clinic.regional,
-      data_inauguracao: this.formatDateToInput(clinic.data_inauguracao),
+      data_inauguracao: this.formatDateToInput(clinic.data_inauguracao as Date),
       ativa: clinic.ativa === true,
     });
   
@@ -144,4 +145,41 @@ export class FormClinicComponent implements OnInit {
   returnPage() {
     window.history.back();
   }
+
+
+  onSubmit() {
+    if (this.form.invalid) {
+      return;
+    }
+    console.log('Formulário enviado:', this.form.value);
+    
+    const clinicData: ClinicInterface = {
+      id: this.clinicId ? Number(this.clinicId) : 0,
+      razao_social: this.form.value.razao_social!,
+      nome_fantasia: this.form.value.nome_fantasia!,
+      cnpj: this.form.value.cnpj!,
+      regional: this.form.value.regional!,
+      data_inauguracao: new Date(this.form.value.data_inauguracao!).toISOString().split('T')[0],
+      especialidades: this.form.value.especialidades_medicas!,
+      ativa: this.form.value.ativa!,
+    };
+
+    if (this.isEditMode) {
+      console.log("Editando clínica:", clinicData);
+      
+    } else {
+      const response = this.serviceApiClinic.postClinic(clinicData);
+      response.subscribe(
+        (response) => {
+          console.log('Clínica criada com sucesso:', response);
+          this.returnPage();
+        },
+        (error) => {
+          console.error('Erro ao criar clínica:', error);
+        }
+      );
+
+    }
+  }
+
 }
