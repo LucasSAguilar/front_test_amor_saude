@@ -43,7 +43,6 @@ export class ClinicTableStateService {
     // Carregar as clínicas
     this.fetchClinics.getAllClinics().subscribe((clinics) => {
       this._allClinics = clinics;
-      console.log('clinics carregadas:', this._allClinics);
       
       this._set({ page: 1 });
       this._search$.next();
@@ -55,22 +54,18 @@ export class ClinicTableStateService {
     this._search$
       .pipe(
         tap(() => {
-          console.log('Busca iniciada. Loading ativado.');
           this._loading$.next(true);
         }),
         debounceTime(300),
         switchMap(() => {
-          console.log('Executando busca...');
           return this._search();
         }),
         delay(100),
         tap(() => {
-          console.log('Busca concluída. Loading desativado.');
           this._loading$.next(false);
         })
       )
       .subscribe((result) => {
-        console.log('Resultado da busca:', result);
         this._clinics$.next(result.clinics);
         this._total$.next(result.total);
       });
@@ -79,7 +74,6 @@ export class ClinicTableStateService {
   private _search(): Observable<SearchResult> {
     const { sortColumn, sortDirection, pageSize, page, searchTerm } = this._state;
 
-    // Verifique se a página é um número válido
     if (isNaN(page) || page < 1) {
       this._set({ page: 1 });
     }
@@ -133,26 +127,20 @@ export class ClinicTableStateService {
   // Setters para atualizar o estado
   set page(page: number) { 
     if (isNaN(page) || page < 1) {
-      console.warn(`Página inválida. Forçando para página 1.`);
       page = 1;
     }
-    console.log('Mudando página para:', page);
     this._set({ page });
   }
   set pageSize(size: number) { 
-    console.log('Mudando pageSize para:', size);
     this._set({ pageSize: size });
   }
   set searchTerm(term: string) { 
-    console.log('Mudando searchTerm para:', term);
     this._set({ searchTerm: term });
   }
   set sortColumn(col: SortColumn) { 
-    console.log('Mudando sortColumn para:', col);
     this._set({ sortColumn: col });
   }
   set sortDirection(dir: SortDirection) { 
-    console.log('Mudando sortDirection para:', dir);
     this._set({ sortDirection: dir });
   }
 }

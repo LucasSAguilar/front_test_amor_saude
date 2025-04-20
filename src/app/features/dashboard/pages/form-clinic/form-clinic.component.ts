@@ -1,17 +1,29 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Validators, FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import {
+  Validators,
+  FormGroup,
+  FormControl,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { FormFieldComponent } from '../../../auth/components/formfield/form-field.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClinicInterface } from '../../models/clinic.model';
 import { FetchClinicsService } from '../../services/fetch-clinics.service';
+import { ErrorMessageComponent } from '../../components/error-message/error-message.component';
 
 @Component({
   selector: 'app-clinic-form',
   templateUrl: './form-clinic.component.html',
   styleUrls: ['./form-clinic.component.css'],
   standalone: true,
-  imports: [NgIf, NgFor, FormFieldComponent, ReactiveFormsModule],
+  imports: [
+    NgIf,
+    NgFor,
+    FormFieldComponent,
+    ReactiveFormsModule,
+    ErrorMessageComponent,
+  ],
 })
 export class FormClinicComponent implements OnInit {
   isLoading = false;
@@ -20,13 +32,18 @@ export class FormClinicComponent implements OnInit {
   especialidades: { label: string; value: string }[] = [];
   clinicId: string | null = null;
   clinicData: ClinicInterface | null = null;
+  errorMessage: string = 'Erro';
+  showErrorModal = false;
+  errorStatus = '';
 
   form = new FormGroup({
     razao_social: new FormControl<string | null>(null, [Validators.required]),
     nome_fantasia: new FormControl<string | null>(null, [Validators.required]),
     cnpj: new FormControl<string | null>(null, [Validators.required]),
     regional: new FormControl<string | null>(null, [Validators.required]),
-    data_inauguracao: new FormControl<string | null>(null, [Validators.required]),
+    data_inauguracao: new FormControl<string | null>(null, [
+      Validators.required,
+    ]),
     especialidades: new FormControl<string[] | null>([], [Validators.required]),
     ativa: new FormControl<boolean | null>(false),
   });
@@ -60,7 +77,6 @@ export class FormClinicComponent implements OnInit {
       { value: 'SUL', label: 'SUL' },
       { value: 'Norte', label: 'Norte' },
     ];
-    
 
     this.especialidades = [
       { label: 'Cardiologia', value: 'Cardiologia' },
@@ -73,7 +89,6 @@ export class FormClinicComponent implements OnInit {
     if (this.isEditMode) {
       this.loadClinicData(this.clinicId!);
     }
-
   }
 
   loadClinicData(id: string) {
@@ -104,9 +119,8 @@ export class FormClinicComponent implements OnInit {
       ativa: clinic.ativa === true,
       especialidades: clinic.especialidades,
     });
-  
   }
-  
+
   private formatDateToInput(dateString: Date): string {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -114,7 +128,6 @@ export class FormClinicComponent implements OnInit {
     const day = date.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
-  
 
   get razao_socialControl(): FormControl {
     return this.form.get('razao_social') as FormControl;
@@ -148,20 +161,22 @@ export class FormClinicComponent implements OnInit {
     this.router.navigate(['/dashboard/clinics']);
   }
 
-
   onSubmit() {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.showError({errorStatus: 400, message: 'Preencha todos os campos obrigatórios!'});
       return;
     }
-    console.log('Formulário enviado:', this.form.value);
-    
+
     const clinicData: ClinicInterface = {
       id: this.clinicId ? Number(this.clinicId) : 0,
       razao_social: this.form.value.razao_social!,
       nome_fantasia: this.form.value.nome_fantasia!,
       cnpj: this.form.value.cnpj!,
       regional: this.form.value.regional!,
-      data_inauguracao: new Date(this.form.value.data_inauguracao!).toISOString().split('T')[0],
+      data_inauguracao: new Date(this.form.value.data_inauguracao!)
+        .toISOString()
+        .split('T')[0],
       especialidades: this.form.value.especialidades!,
       ativa: this.form.value.ativa!,
     };
@@ -170,27 +185,32 @@ export class FormClinicComponent implements OnInit {
       const response = this.serviceApiClinic.putClinic(clinicData);
       response.subscribe(
         (response) => {
-          console.log('Clínica atualizada com sucesso:', response);
           this.returnPage();
         },
         (error) => {
-          console.error('Erro ao atualizar clínica:', error);
+          this.showError(error);
         }
       );
-      
     } else {
       const response = this.serviceApiClinic.postClinic(clinicData);
       response.subscribe(
         (response) => {
-          console.log('Clínica criada com sucesso:', response);
           this.returnPage();
         },
         (error) => {
-          console.error('Erro ao criar clínica:', error);
+          this.showError(error);
         }
       );
-
     }
   }
 
+  showError(error: any) {
+    this.errorStatus = error.status || 'Erro';
+    this.errorMessage = error.message || 'Algo deu errado';
+    this.showErrorModal = true;
+  }
+
+  closeErrorModal() {
+    this.showErrorModal = false;
+  }
 }

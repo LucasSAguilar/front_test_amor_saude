@@ -22,7 +22,6 @@ export class ViewClinicComponent implements OnInit {
     if (this.clinicId) {
       this.fetchClinicService.getClinicById(+this.clinicId).subscribe((data: ClinicInterface) => {
         this.clinicData = data;
-        console.log(data);
         
       });
     }
